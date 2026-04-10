@@ -305,7 +305,7 @@ pip install -r requirements.txt
 **Error**: `GROQ_API_KEY not found`
 ```bash
 # Solution: Add to .env:
-GROQ_API_KEY=your_key_here
+GROQ_API_KEY=your_api_key_here
 ```
 
 **Error**: `DATABASE_URL not found`
