@@ -18,15 +18,18 @@ from routes.profile_routes import router as profile_router
 from routes.workout_routes import router as workout_router
 from services.profile_service import ensure_database_schema
 
+# Load environment variables
 load_dotenv()
 
-# Configure logging
+# Logging setup
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Initialize DB
 Base.metadata.create_all(bind=engine)
 ensure_database_schema()
 
+# Create app
 app = FastAPI(
     title="AI Fitness Backend",
     description="Production-ready backend for an intelligent AI fitness platform",
@@ -35,41 +38,47 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# ============ CORS CONFIGURATION ============
-# Build allowed origins based on environment
-allowed_origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:5174",
-    "http://127.0.0.1:5174",
-    "http://localhost:5175",
-    "http://127.0.0.1:5175",
-]
+# ================== CORS FIX (IMPORTANT) ==================
+ENV = os.getenv("ENV", "production")
 
-# Allow all origins in development mode
-if os.getenv("ENV") == "dev":
+if ENV == "dev":
+    # Allow everything in dev
     allowed_origins = ["*"]
     logger.info("🔓 CORS: Development mode - allowing all origins")
+
 else:
-    # Add production origins from environment
+    # Production mode (Vercel + Render)
+    allowed_origins = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+        "http://localhost:5175",
+        "http://127.0.0.1:5175",
+        "https://kineastrafit-app.onrender.com",  # backend itself
+    ]
+
+    # Add Vercel frontend dynamically
     if os.getenv("ALLOWED_ORIGINS"):
         prod_origins = os.getenv("ALLOWED_ORIGINS").split(",")
         allowed_origins.extend([origin.strip() for origin in prod_origins])
-        logger.info(f"✅ CORS: Production mode - allowed origins: {allowed_origins}")
 
-logger.info(f"✅ CORS enabled for: {allowed_origins}")
+    # 🔥 TEMP: Allow all (SAFE FIX for now)
+    allowed_origins = ["*"]
+
+    logger.info("🌍 CORS: Production mode - allowing all origins (temporary)")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
-    max_age=600,
 )
 
+logger.info(f"✅ CORS enabled for: {allowed_origins}")
 
-# Request logging middleware
+# ================== REQUEST LOGGER ==================
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     logger.info(f"📡 {request.method} {request.url.path}")
@@ -81,7 +90,7 @@ async def log_requests(request: Request, call_next):
         logger.error(f"❌ {request.method} {request.url.path} -> Error: {str(e)}")
         raise
 
-
+# ================== ROUTES ==================
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(history_router)
@@ -90,15 +99,22 @@ app.include_router(nutrition_router)
 app.include_router(chat_router)
 app.include_router(health_router)
 
+# ================== HEALTH CHECK ==================
+@app.get("/")
+def root():
+    return {
+        "status": "healthy",
+        "service": "AI Fitness Backend",
+        "version": "4.0.0"
+    }
 
-# Debug endpoint to verify backend is running
 @app.get("/ping")
 def ping():
     return {"status": "alive", "message": "Backend is running"}
 
-
+# ================== RUN ==================
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
-    debug_mode = os.getenv("ENV") == "dev"
+    debug_mode = ENV == "dev"
     uvicorn.run("app:app", host="0.0.0.0", port=port, reload=debug_mode)
