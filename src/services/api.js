@@ -3,7 +3,7 @@ import axios from "axios";
 export const TOKEN_KEY = "token";
 export const THEME_KEY = "fitness_theme";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const API_URL = import.meta.env.VITE_API_URL || "https://kineastrafit-app.onrender.com";
 console.log("🔌 API URL configured:", API_URL);
 
 const api = axios.create({
