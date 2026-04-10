@@ -31,7 +31,7 @@ Check that `.env` contains:
 ```
 ENV=dev
 PORT=8000
-GROQ_API_KEY=REMOVED_API_KEY
+GROQ_API_KEY=your_api_key_here
 SECRET_KEY=9f7f2c8d9b304c5c8e6b2f3a5d1e7c9b6a4f8d2c1e3b5a7d9c6f2b4e8a1d3c5
 DATABASE_URL=sqlite:///./fitness_app.db
 ```
@@ -159,7 +159,7 @@ Click "Environment" and add:
 ```
 ENV=production
 PORT=8000
-GROQ_API_KEY=REMOVED_API_KEY
+GROQ_API_KEY=your_api_key_here
 SECRET_KEY=9f7f2c8d9b304c5c8e6b2f3a5d1e7c9b6a4f8d2c1e3b5a7d9c6f2b4e8a1d3c5
 DATABASE_URL=(skip for now - use SQLite or add PostgreSQL below)
 ALLOWED_ORIGINS=https://your-frontend-domain.com
