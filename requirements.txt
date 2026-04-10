@@ -1,31 +1,23 @@
-# FastAPI and ASGI server
+# FastAPI and server
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
 
-# Database ORM and drivers
+# Database
 sqlalchemy==2.0.25
 psycopg2-binary==2.9.9
 
-# Utilities
-numpy==1.26.4
-
-# Password hashing and JWT
+# Auth
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 python-jose[cryptography]==3.3.0
 
-# Groq AI client
+# API + HTTP
 groq==0.4.1
 httpx==0.27.0
 
-# Data validation
+# Validation
 email-validator==2.1.0
 pydantic==2.4.2
 
-# Environment configuration
+# Env
 python-dotenv==1.0.0
-
-# RAG and embeddings
-faiss-cpu==1.8.0.post1
-sentence-transformers==3.0.1
-
