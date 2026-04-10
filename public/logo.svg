@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="18" fill="url(#bg)" />
+  <path d="M18 24H24V28H18V24Z" fill="url(#grad)" />
+  <path d="M18 36H24V40H18V36Z" fill="url(#grad)" />
+  <path d="M24 22H28V42H24V22Z" fill="url(#grad)" />
+  <path d="M28 30H36L41 20H46L40 31.5L46 44H41L36 34H28V30Z" fill="url(#grad)" />
+  <path d="M46 24H40V28H46V24Z" fill="url(#grad)" />
+  <path d="M46 36H40V40H46V36Z" fill="url(#grad)" />
+  <path d="M40 22H36V42H40V22Z" fill="url(#grad)" />
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07111F" />
+      <stop offset="1" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="grad" x1="18" y1="18" x2="46" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="65%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#F97316" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,12 @@
+# Railway deployment configuration
+[env]
+PYTHON_VERSION = "3.11"
+PORT = "8000"
+ENV = "production"
+
+[build]
+builder = "dockerfile"
+
+[deploy]
+numReplicas = 1
+startCommand = "uvicorn app:app --host 0.0.0.0 --port $PORT --workers 4"

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "fat-loss-1",
+    "topic": "fat_loss",
+    "content": "Fat loss plans should prioritize a moderate calorie deficit, high protein intake, daily steps, and 3 to 5 weekly strength sessions with added cardio."
+  },
+  {
+    "id": "fat-loss-2",
+    "topic": "fat_loss",
+    "content": "For fat loss, Push Pull Legs works well when paired with 8,000 to 12,000 daily steps and 2 to 3 low-impact cardio sessions."
+  },
+  {
+    "id": "muscle-gain-1",
+    "topic": "muscle_gain",
+    "content": "Muscle gain routines benefit from a slight calorie surplus, progressive overload, and protein intake around 1.8 to 2.2 grams per kilogram of bodyweight."
+  },
+  {
+    "id": "muscle-gain-2",
+    "topic": "muscle_gain",
+    "content": "Beginners building muscle can use Upper Lower or Full Body training 3 to 4 times per week with compound lifts and controlled volume."
+  },
+  {
+    "id": "diet-veg-1",
+    "topic": "diet",
+    "content": "Vegetarian meal plans can rely on paneer, tofu, lentils, Greek yogurt, soy milk, chickpeas, beans, oats, and rice for protein and recovery."
+  },
+  {
+    "id": "diet-nonveg-1",
+    "topic": "diet",
+    "content": "Non-vegetarian fitness diets can include eggs, chicken, fish, Greek yogurt, rice, potatoes, fruit, and vegetables to support protein and calorie targets."
+  },
+  {
+    "id": "beginner-split-1",
+    "topic": "beginner_training",
+    "content": "Beginner workout splits should stay simple with Full Body, Upper Lower, or Push Pull Legs, focusing on form, consistency, and moderate weekly volume."
+  },
+  {
+    "id": "recovery-1",
+    "topic": "recovery",
+    "content": "Recovery improves with 7 to 9 hours of sleep, adequate hydration, and at least one lower intensity day each week."
+  },
+  {
+    "id": "home-workout-1",
+    "topic": "home_workouts",
+    "content": "Home workout plans should use bodyweight, dumbbells, or resistance bands with split squats, push-ups, rows, shoulder presses, hinges, and core work."
+  },
+  {
+    "id": "nutrition-1",
+    "topic": "nutrition",
+    "content": "A useful fitness nutrition plan should include a daily calorie target, protein goal, fiber-rich carbohydrates, enough water, and meals that match the user's diet preference."
+  }
+]

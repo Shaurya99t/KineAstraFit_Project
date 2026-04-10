@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: 13 20 33;
+  --color-surface: 248 250 252;
+  --color-muted: 88 105 131;
+  --color-accent: 14 165 233;
+  --color-accent-soft: 103 232 249;
+  --color-line: 203 213 225;
+  color-scheme: light;
+}
+
+.dark {
+  --color-ink: 241 245 249;
+  --color-surface: 7 17 31;
+  --color-muted: 148 163 184;
+  --color-accent: 56 189 248;
+  --color-accent-soft: 125 211 252;
+  --color-line: 30 41 59;
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 28%),
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.07), transparent 22%),
+    linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(241, 245, 249, 1)),
+    #f8fafc;
+  color: rgb(var(--color-ink));
+  overflow-x: hidden;
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.08), transparent 26%),
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.06), transparent 18%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.99), rgba(7, 17, 31, 0.98)),
+    #020617;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 999px;
+}
+
+.glass-card {
+  @apply border border-slate-200/70 bg-white/80 shadow-[0_14px_48px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-slate-800/90 dark:bg-slate-950/70;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent);
+}
+
+.floating-orb {
+  animation: floatOrb 7s ease-in-out infinite;
+}
+
+.soft-panel {
+  @apply rounded-[24px] border border-slate-200/70 bg-white/80 dark:border-slate-800/90 dark:bg-slate-900/80;
+}
+
+.metric-chip {
+  @apply rounded-full border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900 dark:text-slate-200;
+}
+
+.app-shell {
+  @apply mx-auto w-full max-w-[1160px];
+}
+
+.section-label {
+  @apply text-[11px] uppercase tracking-[0.28em] text-muted;
+}
+
+.kine-card {
+  @apply rounded-[28px] border border-slate-200/70 bg-white/80 p-5 shadow-[0_14px_48px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-slate-800/90 dark:bg-slate-950/80;
+}
+
+.kine-button-primary {
+  @apply inline-flex items-center justify-center rounded-[18px] bg-slate-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400;
+}
+
+.kine-button-secondary {
+  @apply inline-flex items-center justify-center rounded-[18px] border border-slate-200/80 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700/80 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800;
+}
+
+.kine-input {
+  @apply w-full rounded-[18px] border border-slate-200/80 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500/60 dark:border-slate-700/80 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500;
+}
+
+.glow-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.28), transparent);
+}
+
+@keyframes floatOrb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) scale(1.04);
+  }
+}
