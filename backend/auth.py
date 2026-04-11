@@ -14,7 +14,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from database import get_db
-from backend.models import User
+from models import User
 
 load_dotenv()
 
