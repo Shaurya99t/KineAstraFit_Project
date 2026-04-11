@@ -15,10 +15,13 @@ def get_profile(current_user: User = Depends(get_current_user), db: Session = De
 
     if not profile:
         profile = UserProfile(
-            user_id=current_user.id,
-            name="New User",
-            email=current_user.email,
-            goal="fitness"
+    user_id=current_user.id,
+    name="New User",
+    email=current_user.email,
+    goal="fitness",
+    weight=70.0,
+    region="india",
+)
         )
         db.add(profile)
         db.commit()
