@@ -10,25 +10,49 @@ from database import get_db
 from models import User, UserProfile
 from schemas import ProfileCreate, ProfileResponse, ProfileUpdate
 from services.nutrition_service import get_nutrition_plan
-from services.profile_service import (
-    create_history_snapshot,
-    get_profile_or_404,
-    sync_profile_defaults,
-)
+from services.profile_service import create_history_snapshot
 
 router = APIRouter(tags=["Profile"])
 
 
+# ✅ FIXED: AUTO CREATE PROFILE (NO MORE 404)
 @router.get("/profile", response_model=ProfileResponse)
 @router.get("/profile/me", response_model=ProfileResponse)
 async def get_profile(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    profile = get_profile_or_404(db, current_user.id)
-    return sync_profile_defaults(profile, current_user, db)
+    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
+
+    # 🔥 AUTO CREATE PROFILE IF NOT EXISTS
+    if not profile:
+        profile = UserProfile(
+            user_id=current_user.id,
+            name="New User",
+            email=current_user.email,
+            age=18,
+            weight=70,
+            height=170,
+            goal="fitness",
+            diet="balanced",
+            activity_level="moderate",
+            fitness_level="beginner",
+            region="india",
+            target_weight=70,
+            workout_preference="gym",
+            medical_notes="",
+            memory_summary="New user profile created automatically.",
+            completed_workouts=0,
+            skipped_workouts=0,
+        )
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+
+    return profile
 
 
+# ✅ UPSERT PROFILE (CREATE OR UPDATE)
 @router.post("/profile", response_model=ProfileResponse)
 @router.put("/profile", response_model=ProfileResponse)
 async def upsert_profile(
@@ -54,6 +78,7 @@ async def upsert_profile(
     db.add(current_user)
 
     if profile:
+        # ✅ UPDATE
         profile.name = profile_data.name
         profile.email = profile_data.email
         profile.age = profile_data.age
@@ -68,6 +93,7 @@ async def upsert_profile(
         profile.workout_preference = profile_data.workout_preference
         profile.medical_notes = profile_data.medical_notes
     else:
+        # ✅ CREATE
         profile = UserProfile(
             user_id=current_user.id,
             name=profile_data.name,
@@ -94,6 +120,7 @@ async def upsert_profile(
     db.commit()
     db.refresh(profile)
 
+    # ✅ HISTORY SNAPSHOT
     nutrition = get_nutrition_plan(profile)
     create_history_snapshot(
         db,
