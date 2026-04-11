@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Text
 from database import Base
 
 
-# ✅ USER TABLE (THIS WAS MISSING → CRASH FIX)
+# ================= USER =================
 class User(Base):
     __tablename__ = "users"
 
@@ -11,7 +11,7 @@ class User(Base):
     password = Column(String)
 
 
-# ✅ PROFILE TABLE
+# ================= PROFILE =================
 class UserProfile(Base):
     __tablename__ = "user_profiles"
 
@@ -34,7 +34,7 @@ class UserProfile(Base):
     last_active_date = Column(String)
 
 
-# ✅ HISTORY TABLE
+# ================= HISTORY =================
 class UserHistory(Base):
     __tablename__ = "user_history"
 
@@ -48,7 +48,7 @@ class UserHistory(Base):
     calories_intake = Column(Integer)
 
 
-# ✅ CHAT TABLE
+# ================= CHAT =================
 class ChatHistory(Base):
     __tablename__ = "chat_history"
 
@@ -57,3 +57,15 @@ class ChatHistory(Base):
     user_input = Column(Text)
     ai_response = Column(Text)
     timestamp = Column(String)
+
+
+# ================= WORKOUT =================
+class WorkoutLog(Base):
+    __tablename__ = "workout_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+    workout_name = Column(String)
+    duration = Column(Integer)
+    calories_burned = Column(Integer)
+    date = Column(String)
