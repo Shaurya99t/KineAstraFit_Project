@@ -1,70 +1,44 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from database import get_db
-from models import UserProfile, User
-from auth import get_current_user
+from database import Base, engine
 
-router = APIRouter()
+# ✅ ROUTES
+from routes.auth_routes import router as auth_router
+from routes.profile_routes import router as profile_router
+from routes.dashboard_routes import router as dashboard_router
 
+# ✅ CREATE TABLES
+Base.metadata.create_all(bind=engine)
 
-# ✅ GET PROFILE (AUTO CREATE)
-@router.get("/profile")
-def get_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
-
-    if not profile:
-        profile = UserProfile(
-    user_id=current_user.id,
-    name="New User",
-    email=current_user.email,
-    goal="fitness",
-    weight=70.0,
-    region="india",
+app = FastAPI(
+    title="KineAstraFit Backend",
+    version="1.0.0"
 )
-        )
-        db.add(profile)
-        db.commit()
-        db.refresh(profile)
 
-    return profile
+# ✅ CORS CONFIG
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://kine-astra-fit-project-oepq.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# ✅ INCLUDE ROUTES
+app.include_router(auth_router)
+app.include_router(profile_router)
+app.include_router(dashboard_router)
 
-# ✅ CREATE PROFILE (POST)
-@router.post("/profile")
-def create_profile(data: dict, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
-
-    if profile:
-        raise HTTPException(status_code=400, detail="Profile already exists")
-
-    profile = UserProfile(
-        user_id=current_user.id,
-        name=data.get("name"),
-        email=data.get("email"),
-        goal=data.get("goal"),
-    )
-
-    db.add(profile)
-    db.commit()
-    db.refresh(profile)
-
-    return profile
-
-
-# ✅ UPDATE PROFILE (PUT) ← THIS FIXES YOUR ERROR
-@router.put("/profile")
-def update_profile(data: dict, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
-
-    if not profile:
-        raise HTTPException(status_code=404, detail="Profile not found")
-
-    profile.name = data.get("name", profile.name)
-    profile.email = data.get("email", profile.email)
-    profile.goal = data.get("goal", profile.goal)
-
-    db.commit()
-    db.refresh(profile)
-
-    return profile
+# ✅ ROOT
+@app.get("/")
+def root():
+    return {
+        "status": "healthy",
+        "service": "AI Fitness Backend",
+        "version": "1.0.0"
+    }
