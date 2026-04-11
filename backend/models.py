@@ -69,3 +69,17 @@ class WorkoutLog(Base):
     duration = Column(Integer)
     calories_burned = Column(Integer)
     date = Column(String)
+
+
+# ================= NUTRITION =================
+class NutritionLog(Base):
+    __tablename__ = "nutrition_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+    food_item = Column(String)
+    calories = Column(Integer)
+    protein = Column(Integer)
+    carbs = Column(Integer)
+    fats = Column(Integer)
+    date = Column(String)
