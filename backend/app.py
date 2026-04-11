@@ -3,14 +3,21 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 
 from database import Base, engine
+
+# ✅ ROUTES
 from routes.auth_routes import router as auth_router
 from routes.profile_routes import router as profile_router
+from routes.dashboard_routes import router as dashboard_router  # 🔥 NEW
 
+# ✅ CREATE TABLES
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="KineAstraFit Backend",
+    version="1.0.0"
+)
 
-# ✅ CORS FIX (IMPORTANT)
+# ✅ CORS CONFIG (FIXED)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -23,9 +30,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ✅ INCLUDE ROUTES
 app.include_router(auth_router)
 app.include_router(profile_router)
+app.include_router(dashboard_router)  # 🔥 IMPORTANT FIX
 
+# ✅ ROOT
 @app.get("/")
 def root():
-    return {"status": "Backend running"}
+    return {
+        "status": "healthy",
+        "service": "AI Fitness Backend",
+        "version": "1.0.0"
+    }
