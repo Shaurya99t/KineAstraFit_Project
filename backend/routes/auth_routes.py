@@ -6,7 +6,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from auth import authenticate_user, create_access_token, hash_password
+from backend.auth import authenticate_user, create_access_token, hash_password
 from database import get_db
 from models import User, UserProfile
 from schemas import LoginRequest, Token, UserCreate, UserResponse
