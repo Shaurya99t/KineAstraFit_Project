@@ -1,44 +1,83 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-from database import Base, engine
+from database import get_db
+from models import UserProfile, User
+from auth import get_current_user
 
-# ✅ ROUTES
-from routes.auth_routes import router as auth_router
-from routes.profile_routes import router as profile_router
-from routes.dashboard_routes import router as dashboard_router
+router = APIRouter()
 
-# ✅ CREATE TABLES
-Base.metadata.create_all(bind=engine)
 
-app = FastAPI(
-    title="KineAstraFit Backend",
-    version="1.0.0"
-)
+@router.get("/profile")
+def get_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
 
-# ✅ CORS CONFIG
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "https://kine-astra-fit-project-oepq.vercel.app",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    if not profile:
+        profile = UserProfile(
+            user_id=current_user.id,
+            name=current_user.email.split("@")[0],
+            email=current_user.email,
+            goal="fitness",
+        )
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
 
-# ✅ INCLUDE ROUTES
-app.include_router(auth_router)
-app.include_router(profile_router)
-app.include_router(dashboard_router)
-
-# ✅ ROOT
-@app.get("/")
-def root():
     return {
-        "status": "healthy",
-        "service": "AI Fitness Backend",
-        "version": "1.0.0"
+        "user_id": profile.user_id,
+        "name": profile.name,
+        "email": profile.email,
+        "goal": profile.goal,
+        "region": "india",
+        "weight": 70.0,
+    }
+
+
+@router.post("/profile")
+def create_profile(data: dict, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    existing = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Profile already exists")
+
+    profile = UserProfile(
+        user_id=current_user.id,
+        name=data.get("name"),
+        email=data.get("email"),
+        goal=data.get("goal"),
+    )
+    db.add(profile)
+    db.commit()
+    db.refresh(profile)
+
+    return {
+        "user_id": profile.user_id,
+        "name": profile.name,
+        "email": profile.email,
+        "goal": profile.goal,
+        "region": "india",
+        "weight": 70.0,
+    }
+
+
+@router.put("/profile")
+def update_profile(data: dict, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
+
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+
+    profile.name = data.get("name", profile.name)
+    profile.email = data.get("email", profile.email)
+    profile.goal = data.get("goal", profile.goal)
+
+    db.commit()
+    db.refresh(profile)
+
+    return {
+        "user_id": profile.user_id,
+        "name": profile.name,
+        "email": profile.email,
+        "goal": profile.goal,
+        "region": "india",
+        "weight": 70.0,
     }
