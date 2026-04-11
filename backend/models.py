@@ -1,6 +1,17 @@
 from sqlalchemy import Column, Integer, String, Text
 from database import Base
 
+
+# ✅ USER TABLE (THIS WAS MISSING → CRASH FIX)
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    password = Column(String)
+
+
+# ✅ PROFILE TABLE
 class UserProfile(Base):
     __tablename__ = "user_profiles"
 
@@ -23,6 +34,7 @@ class UserProfile(Base):
     last_active_date = Column(String)
 
 
+# ✅ HISTORY TABLE
 class UserHistory(Base):
     __tablename__ = "user_history"
 
@@ -36,6 +48,7 @@ class UserHistory(Base):
     calories_intake = Column(Integer)
 
 
+# ✅ CHAT TABLE
 class ChatHistory(Base):
     __tablename__ = "chat_history"
 
