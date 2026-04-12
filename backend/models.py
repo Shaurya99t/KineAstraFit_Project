@@ -2,19 +2,25 @@ from sqlalchemy import Column, Integer, String, Text
 from database import Base
 
 
+# =========================
+# USER TABLE
+# =========================
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    email = Column(String, unique=True)
-    password = Column(String)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password = Column(String, nullable=False)
 
 
+# =========================
+# USER PROFILE
+# =========================
 class UserProfile(Base):
     __tablename__ = "user_profiles"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, unique=True)
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, unique=True, index=True)
 
     name = Column(String)
     email = Column(String)
@@ -35,12 +41,18 @@ class UserProfile(Base):
     workout_preference = Column(String)
     medical_notes = Column(Text)
 
+    completed_workouts = Column(Integer, default=0)
+    skipped_workouts = Column(Integer, default=0)
+    last_active_date = Column(String)
 
-# ✅ THIS IS MISSING — ADD THIS
+
+# =========================
+# USER HISTORY (FOR PROGRESS)
+# =========================
 class UserHistory(Base):
     __tablename__ = "user_history"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer)
 
     log_date = Column(String)
@@ -52,11 +64,50 @@ class UserHistory(Base):
     calories_intake = Column(Integer)
 
 
+# =========================
+# WORKOUT LOG
+# =========================
+class WorkoutLog(Base):
+    __tablename__ = "workout_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+
+    exercise_name = Column(String)
+    sets = Column(Integer)
+    reps = Column(Integer)
+    weight = Column(Integer)
+    date = Column(String)
+
+    intensity = Column(Integer)
+
+
+# =========================
+# NUTRITION LOG
+# =========================
+class NutritionLog(Base):
+    __tablename__ = "nutrition_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+
+    food = Column(String)
+    calories = Column(Integer)
+    protein = Column(Integer)
+    carbs = Column(Integer)
+    fats = Column(Integer)
+    date = Column(String)
+
+
+# =========================
+# CHAT HISTORY
+# =========================
 class ChatHistory(Base):
     __tablename__ = "chat_history"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer)
 
     user_input = Column(Text)
     ai_response = Column(Text)
+    timestamp = Column(String)
