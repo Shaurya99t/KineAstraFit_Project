@@ -4,16 +4,16 @@ Groq API client helpers for async AI chat usage.
 
 import asyncio
 import os
-
 from dotenv import load_dotenv
 from groq import Groq
 
 load_dotenv()
 
-if not os.getenv("GROQ_API_KEY"):
+_groq_api_key = os.getenv("GROQ_API_KEY")
+if not _groq_api_key:
     raise ValueError("GROQ_API_KEY not found in environment variables")
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = Groq(api_key=_groq_api_key)
 
 
 def _format_response_text(text: str) -> str:
@@ -32,15 +32,10 @@ def _sync_chat_completion(prompt: str) -> str:
                         "You are a professional fitness trainer providing clear, practical advice. "
                         "Respond in clean English with an Indian conversational tone. "
                         "Keep responses to max 3-4 bullet points. No long paragraphs. "
-                        "Be direct and practical. Avoid slang, Hindi words, or Hinglish. "
-                        "Focus on consistency, safety, and actionable steps. "
-                        "Always encourage consulting healthcare professionals for medical concerns."
+                        "Be direct and practical. Focus on consistency, safety, and actionable steps."
                     ),
                 },
-                {
-                    "role": "user",
-                    "content": prompt,
-                },
+                {"role": "user", "content": prompt},
             ],
             temperature=0.4,
             max_tokens=220,
@@ -51,14 +46,7 @@ def _sync_chat_completion(prompt: str) -> str:
     except Exception as exc:
         error_message = str(exc)
         if "api_key" in error_message.lower():
-            raise Exception(
-                "Groq API key not configured. Please set GROQ_API_KEY environment variable."
-            ) from exc
-        if "decommissioned" in error_message.lower() or "model" in error_message.lower():
-            raise Exception(
-                "Groq model error: the configured model is unavailable. "
-                "Please verify the model name or update it to a supported Groq model."
-            ) from exc
+            raise Exception("Groq API key not configured. Please set GROQ_API_KEY.") from exc
         raise Exception(f"Failed to get AI response: {error_message}") from exc
 
 
