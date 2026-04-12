@@ -64,17 +64,7 @@ async def upsert_profile(
     db: Session = Depends(get_db),
 ):
     # Check email not used by another account
-    existing_user = (
-        db.query(User)
-        .filter(User.email == profile_data.email, User.id != current_user.id)
-        .first()
-    )
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Another account already uses this email.",
-        )
-
+    
     profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
     previous_goal = profile.goal if profile else profile_data.goal
 
