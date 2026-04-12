@@ -6,6 +6,7 @@ from database import Base, engine
 from routes.auth_routes import router as auth_router
 from routes.profile_routes import router as profile_router
 from routes.dashboard_routes import router as dashboard_router
+from routes.chat_routes import router as chat_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -29,6 +30,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(dashboard_router)
+app.include_router(chat_router)
 
 @app.get("/")
 def root():
