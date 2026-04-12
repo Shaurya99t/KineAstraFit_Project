@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text
 from database import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -35,10 +36,27 @@ class UserProfile(Base):
     medical_notes = Column(Text)
 
 
+# ✅ THIS IS MISSING — ADD THIS
+class UserHistory(Base):
+    __tablename__ = "user_history"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer)
+
+    log_date = Column(String)
+    weight = Column(Integer)
+
+    previous_goal = Column(String)
+    weekly_performance = Column(Integer)
+    streak_days = Column(Integer)
+    calories_intake = Column(Integer)
+
+
 class ChatHistory(Base):
     __tablename__ = "chat_history"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer)
+
     user_input = Column(Text)
     ai_response = Column(Text)
