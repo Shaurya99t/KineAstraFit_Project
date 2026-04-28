@@ -2,8 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 
-from database import Base, engine, SessionLocal
-from models import User
+from database import Base, engine
 
 from routes.auth_routes import router as auth_router
 from routes.profile_routes import router as profile_router
@@ -12,30 +11,25 @@ from routes.workout_routes import router as workout_router
 from routes.nutrition_routes import router as nutrition_router
 from routes.chat_routes import router as chat_router
 
-# =========================
-# CREATE TABLES
-# =========================
+# Create tables
 Base.metadata.create_all(bind=engine)
 
-# =========================
-# FASTAPI INIT
-# =========================
 app = FastAPI()
 
-# =========================
-# CORS
-# =========================
+# ✅ FIXED CORS (IMPORTANT)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://kine-astra-fit-project-oepq.vercel.app",
+        "http://localhost:5173",
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# =========================
-# LOGGING
-# =========================
+# Logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -45,21 +39,7 @@ async def log_requests(request: Request, call_next):
     response = await call_next(request)
     return response
 
-
-# =========================
-# 🔥 TEMP FIX: RESET USERS
-# =========================
-@app.on_event("startup")
-def nuke_users():
-    db = SessionLocal()
-    db.query(User).delete()
-    db.commit()
-    db.close()
-
-
-# =========================
-# ROUTES
-# =========================
+# Routes
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(history_router)
@@ -67,10 +47,6 @@ app.include_router(workout_router)
 app.include_router(nutrition_router)
 app.include_router(chat_router)
 
-
-# =========================
-# ROOT
-# =========================
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "Backend running"}
+    return {"status": "ok"}
